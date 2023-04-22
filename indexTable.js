@@ -67,3 +67,7 @@ var json =[     //jsonサンプルデータ
       //文字要素を追加
       allText.textContent = json[0]["本文"];
       document.getElementById("AllText").appendChild(allText);
+
+      var Ext = document.createElement("p");
+      Ext.textContent = "目次をクリックすると、ここに本文からの抜き出し部分が表示されます";
+      document.getElementById("extraction").appendChild(Ext);
