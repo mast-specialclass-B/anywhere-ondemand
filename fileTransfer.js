@@ -1,4 +1,3 @@
-
 async function uploadFile() {
 	const fileInput=document.getElementById("fileInput");
 	const file = fileInput.files[0];
@@ -10,12 +9,9 @@ async function uploadFile() {
 		method: "POST",
 		body: formData,
 	});
-	// const response = await fetch("http://localhost:5000/", {
-	// 	method: "GET",
-	// });
 
 	if (response.ok) {
-		const result = await response;
+		const result = await response.json();
 		console.log("success");
 		console.log(result);
 	} else {
