@@ -54,7 +54,8 @@ function generateIndexTable(json) {
         // td要素を生成
         var td = document.createElement('td');
         // td要素内にテキストを追加
-        td.textContent = json['index'][i]['index'];
+        var indexname =  json['index'][i]['index'];
+        td.innerHTML = `<a onclick="putIndex('${indexname}')">${indexname}</a>`
         // td要素をtr要素の子要素に追加
         tr.appendChild(td);
         // tr要素をtable要素の子要素に追加
@@ -76,6 +77,10 @@ function generateIndexTable(json) {
     Ext.textContent = "目次をクリックすると、ここに本文からの抜き出し部分が表示されます";
     document.getElementById("extraction").appendChild(Ext);
 }
+
+function putIndex(index){    
+    console.log(index);
+};
 
 async function generateIndex(){
     removePreContent();
