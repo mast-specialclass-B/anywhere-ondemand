@@ -5,6 +5,16 @@
 			<link rel="stylesheet" href="/css/normalize.css"/>
     		<link rel="stylesheet" href="/css/skeleton.css"/>
 		        <title>File Upload Example</title>
+				<script>
+					(function(d) {
+					  var config = {
+						kitId: 'qij4zfj',
+						scriptTimeout: 3000,
+						async: true
+					  },
+					  h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+					})(document);
+				  </script>
 	</head>
 	<body>
 		<div class="container">
@@ -30,8 +40,12 @@
 			<a onclick="uploadFile()" class="button button-primary u-full-width">Upload</a>
 			<br>
 			<br>
-			<h3>index</h3>
-			<div id ='indexTable' ></div>
+			<h3>目次</h3>
+			<div id ='indexTable'></div>
+			<h3>本文</h3>
+			<div class="box">
+				<div id = "AllText"></div>
+			</div>
 		</div>
 		<script src="fileTransfer.js"></script>
 		<script src="dropFileData.js"></script>
