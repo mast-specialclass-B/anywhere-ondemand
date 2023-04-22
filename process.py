@@ -32,7 +32,7 @@ def process_file():
 
 def transcript_file(filename):
     openai.api_key = os.environ['OPENAI_API_KEY']
-    filename = open("sampleTokyo.wav", "rb")
+    filename = open(filename, "rb")
     transcript = openai.Audio.transcribe("whisper-1", filename)
     return transcript['text']
 
