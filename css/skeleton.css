@@ -121,10 +121,10 @@ are based on 10px sizing. So basically 1.5rem = 15px :) */
 html {
   font-size: 62.5%; }
 body {
-  font-size: 1.5em; /* currently ems cause chrome bug misinterpreting rems on body element */
+  font-size: 2.0em; /* currently ems cause chrome bug misinterpreting rems on body element */
   line-height: 1.6;
   font-weight: 400;
-  font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, "toppan-bunkyu-gothic-pr6n",sans-serif;
   color: #222; }
 
 
@@ -447,4 +447,31 @@ there.
   width: 999px; height: 999px;
   font-size: 999px;
   opacity: 0;
+}
+
+.box{
+  padding: 0.5em 1em;
+  margin: 2em 0;
+  color: black;
+  background: white;
+  border-top: solid 5px #340086;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.11);
+  overflow-y: scroll;
+  height: 320px;
+}
+.box p {
+  margin: 0; 
+  padding: 0;
+  font-size: 2.5rem;
+}
+
+/* スクロールバー */
+::-webkit-scrollbar{
+  width: 10px;
+}
+::-webkit-scrollbar-track{
+  background-color: #ccc;
+}
+::-webkit-scrollbar-thumb{
+  background-color: #33C3F0;
 }
