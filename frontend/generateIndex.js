@@ -79,6 +79,7 @@ function generateIndexTable(json) {
 }
 
 async function putIndex(index){  
+    const loader = document.getElementById('loadCircle');
     if(loader.classList.contains("done")){
         loader.classList.remove('done');
     }
