@@ -36,10 +36,9 @@ def pull_out_by_index():
     index = request_json['index']
     text = request_json['text']
 
-    content = "以下の文章について、この目次に該当する部分を抜き出してください。\n目次: " + index + "\n文章: " + text
+    content = "以下の文章について、この目次に該当する部分を抜き出してください。出力は該当部分の抜出しのみにしてください。\n目次: " + index + "\n文章: " + text
 
     completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": content}])
-
     completion_content = completion.choices[0].message.content
     print(completion_content)
 

@@ -87,6 +87,40 @@ function generateIndexTable(json) {
     document.getElementById("extraction").appendChild(Ext);
 }
 
+async function putIndex(index){  
+    const preExt = document.getElementById('ExtContent');
+    if (preExt != null) {
+        preExt.remove();  
+    }
+
+    const text_element = document.getElementById("AllText");
+    const text = text_element.textContent;
+
+    data = {'index': index, 'text': text};
+    console.log(data);
+    
+    const response = await fetch("http://127.0.0.1:5000/pull-out", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+    });
+    
+    if (response.ok) {
+        const result = await response.json();
+        console.log("success");
+        console.log(result['text']);
+        var Ext = document.createElement("p");
+        Ext.setAttribute('id', 'ExtContent');
+        Ext.textContent = result['text'];
+        document.getElementById("extraction").appendChild(Ext);
+    } else {
+        console.error("File upload failed");
+        return null;
+    }
+};
+
 async function generateIndex(){
     removePreContent();
     const json = await uploadFile();
