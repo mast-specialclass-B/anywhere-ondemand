@@ -83,6 +83,8 @@ function putIndex(index){
 };
 
 async function generateIndex(){
+    const uploadButton = document.getElementById("uploadButton");
+    uploadButton.disabled = true;
     removePreContent();
     const json = await uploadFile();
     generateIndexTable(json);

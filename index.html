@@ -22,7 +22,7 @@
 			<h1>audio to index</h1>
 			<br>
 			<div class="uploader">
-				<input type="file" accept="audio/*" id = "fileInput" />
+				<input type="file" accept="audio/*" id = "fileInput" onchange="ableButton()"/>
 			</div>
 			<table class="u-full-width">
 				<thead>
@@ -37,7 +37,7 @@
 				</tbody>
 			  </table>
 			<br>
-			<a onclick="generateIndex()" class="button button-primary u-full-width">Upload</a>
+			<button onclick="generateIndex()" class="button-primary u-full-width" id = "uploadButton" >Upload</button>
 			<br>
 			<br>
 			<h3>目次</h3>
