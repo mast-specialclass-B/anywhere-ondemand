@@ -7,7 +7,7 @@ app = Flask(__name__)
 CORS(app)
 
 @app.route("/upload", methods=["POST"])
-def process_file():
+def generate_index():
     file = request.files["file"]
     filename = file.filename
     file.save(filename)
@@ -27,6 +27,24 @@ def process_file():
         index.append({'index': splited[1]})
 
     result = jsonify({'transcript': {'text': transcript}, 'index': index})
+
+    return result
+
+@app.route("/pull-out", methods=["POST"])
+def pull_out_by_index():
+    request_json = request.json
+    index = request_json['index']
+    text = request_json['text']
+
+    content = "以下の文章について、この目次に該当する部分を抜き出してください。\n目次: " + index + "\n文章: " + text
+
+    completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": content}])
+
+    completion_content = completion.choices[0].message.content
+    print(completion_content)
+
+    result = jsonify({'text': completion_content})
+    print(result)
 
     return result
 
