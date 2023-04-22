@@ -19,11 +19,10 @@ async function uploadFile() {
 	}
 }
 
-document.querySelector('input').addEventListener('change', (evt) => {
-	console.log(evt.target.files[0]);
-  });
-  const displayEl = document.querySelector(".dropped-file");
-  const fileInputEl = document.querySelector("input");
-  fileInputEl.addEventListener("change", (e) => {
+
+//ドロップしたファイルのファイル名を表示するためのやつ
+const displayEl = document.querySelector(".dropped-file");
+const fileInputEl = document.querySelector("input");
+fileInputEl.addEventListener("change", (e) => {
 	displayEl.innerText = e.target.files[0].name;
-  });
+});
