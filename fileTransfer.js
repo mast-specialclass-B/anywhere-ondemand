@@ -1,3 +1,4 @@
+
 async function uploadFile() {
 	const fileInput=document.getElementById("fileInput");
 	const file = fileInput.files[0];
@@ -17,3 +18,12 @@ async function uploadFile() {
 		console.error("File upload failed");
 	}
 }
+
+document.querySelector('input').addEventListener('change', (evt) => {
+	console.log(evt.target.files[0]);
+  });
+  const displayEl = document.querySelector(".dropped-file");
+  const fileInputEl = document.querySelector("input");
+  fileInputEl.addEventListener("change", (e) => {
+	displayEl.innerText = e.target.files[0].name;
+  });

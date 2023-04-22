@@ -2,12 +2,33 @@
 <html>
 	<head>
 		    <meta charset="utf-8">
+			<link rel="stylesheet" href="/css/normalize.css"/>
+    		<link rel="stylesheet" href="/css/skeleton.css"/>
 		        <title>File Upload Example</title>
 	</head>
 	<body>
-		    <h1>File Upload Example</h1>
-		    <input type="file" id="fileInput">
-		    <button onclick="uploadFile()">Upload</button>
-		    <script src="fileTransfer.js"></script>
+		<div class="container">
+			<br>
+			<h1>audio to index</h1>
+			<br>
+			<div class="uploader">
+				<input type="file" accept="audio/*" id = "fileInput" />
+			</div>
+			<table class="u-full-width">
+				<thead>
+				  <tr>
+					<th>dropped / selected file</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  <tr>
+					<td><span class="dropped-file"></span></td>
+				  </tr>
+				</tbody>
+			  </table>
+			<br>
+			<a onclick="uploadFile()" class="button button-primary u-full-width">Upload</a>
+		</div>
+		<script src="fileTransfer.js"></script>
 	</body>
 </html>
