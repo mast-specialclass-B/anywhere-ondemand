@@ -24,7 +24,7 @@ def process_file():
     indexs = completion_content.splitlines()
     for item in indexs:
         splited = item.split(',')
-        index.append({'index': splited[1], 'index_num': splited[0]})
+        index.append({'index': splited[1]})
 
     result = jsonify({'transcript': {'text': transcript}, 'index': index})
 
