@@ -79,6 +79,9 @@ function generateIndexTable(json) {
 }
 
 async function putIndex(index){  
+    if(loader.classList.contains("done")){
+        loader.classList.remove('done');
+    }
     const preExt = document.getElementById('ExtContent');
     if (preExt != null) {
         preExt.remove();  
@@ -110,12 +113,25 @@ async function putIndex(index){
         console.error("File upload failed");
         return null;
     }
+    loader.classList.add('done');
 };
 
+const reloadButton = document.getElementById("reloadButton");
+reloadButton.disabled = true;
+
 async function generateIndex(){
+    const loader = document.getElementById('loadCircle');
+    if(loader.classList.contains("done")){
+        loader.classList.remove('done');
+    }
     const uploadButton = document.getElementById("uploadButton");
     uploadButton.disabled = true;
     removePreContent();
     const json = await uploadFile();
     generateIndexTable(json);
+    loader.classList.add('done');
+    const reloadButton = document.getElementById("reloadButton");
+    if (reloadButton.disabled == true){
+        reloadButton.disabled = false;
+    }
 }

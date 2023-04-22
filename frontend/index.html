@@ -18,6 +18,7 @@
 	</head>
 	<body>
 		<div class="container">
+			<div class="loader done" id ="loadCircle"></div>
 			<br>
 			<h1>audio to index</h1>
 			<br>
@@ -42,6 +43,8 @@
 			<br>
 			<h3>目次</h3>
 			<div id ='indexTable'></div>
+			<br>
+			<button onclick="generateIndex()" class="button-primary u-full-width" id = "reloadButton" >reload</button>
 			<br>
 			<h3>目次部分の抜き出し</h3>
 			<div class = "box">
