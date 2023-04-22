@@ -421,7 +421,7 @@ there.
   position: relative;
   border-radius: 8px;
   width: 640px; height: 360px;
-  background: #340086;
+  background: #ffffff;
   overflow: hidden;
 }
 
@@ -432,8 +432,8 @@ there.
   position: absolute;
   top: 24px; bottom: 24px;
   left: 24px; right: 24px;
-  border: dashed 2px #fafafa;
-  color: #fafafa;
+  border: dashed 2px #340086;
+  color: #340086;
   font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 20px;
   content: 'drag and drop your file here or click here';
