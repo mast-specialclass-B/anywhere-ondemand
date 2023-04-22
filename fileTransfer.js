@@ -13,7 +13,7 @@ async function uploadFile() {
 	if (response.ok) {
 		const result = await response.json();
 		console.log("success");
-		console.log(result);
+		console.log(result['index'][0]);
 	} else {
 		console.error("File upload failed");
 	}
