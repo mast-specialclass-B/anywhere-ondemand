@@ -24,7 +24,7 @@ def process_file():
     indexs = completion_content.splitlines()
     for item in indexs:
         splited = item.split(',')
-        index.append({'index': splited[1], 'index_num': splited[0]})
+        index.append({'index': splited[1]})
 
     result = jsonify({'transcript': {'text': transcript}, 'index': index})
 
@@ -32,7 +32,7 @@ def process_file():
 
 def transcript_file(filename):
     openai.api_key = os.environ['OPENAI_API_KEY']
-    filename = open("sampleTokyo.wav", "rb")
+    filename = open(filename, "rb")
     transcript = openai.Audio.transcribe("whisper-1", filename)
     return transcript['text']
 
