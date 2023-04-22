@@ -43,30 +43,21 @@ function generateIndexTable(json) {
     
     // ヘッダーを作成
     var tr = document.createElement('tr');
-    for (key in json['index'][0]) {
-        // th要素を生成
-        var th = document.createElement('th');
-        // th要素内にテキストを追加
-        th.textContent = key;
-        // th要素をtr要素の子要素に追加
-        tr.appendChild(th);
-    }
-    // tr要素をtable要素の子要素に追加
-    table.appendChild(tr);
+    
     
     // テーブル本体を作成
     for (var i = 0; i < json['index'].length; i++) {
+        console.log(json['index'][i]);
         // tr要素を生成
         var tr = document.createElement('tr');
         // th・td部分のループ
-        for (key in json['index'][0]) {
-            // td要素を生成
-            var td = document.createElement('td');
-            // td要素内にテキストを追加
-            td.textContent = json['index'][i][key];
-            // td要素をtr要素の子要素に追加
-            tr.appendChild(td);
-        }
+        // td要素を生成
+        var td = document.createElement('td');
+        // td要素内にテキストを追加
+        var indexname =  json['index'][i]['index'];
+        td.innerHTML = `<a onclick="putIndex('${indexname}')">${indexname}</a>`
+        // td要素をtr要素の子要素に追加
+        tr.appendChild(td);
         // tr要素をtable要素の子要素に追加
         table.appendChild(tr);
     }
@@ -86,6 +77,10 @@ function generateIndexTable(json) {
     Ext.textContent = "目次をクリックすると、ここに本文からの抜き出し部分が表示されます";
     document.getElementById("extraction").appendChild(Ext);
 }
+
+function putIndex(index){    
+    console.log(index);
+};
 
 async function generateIndex(){
     removePreContent();
