@@ -1,13 +1,17 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import werkzeug
+import openai
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/upload", methods=["POST"])
 def process_file():
     file = request.files["file"]
-    filename = werkzeug.secure_filename(file.filename)
+    filename = file.filename
     file.save(filename)
+    print(filename)
 
     result = process_your_file(filename)
 
