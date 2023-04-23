@@ -477,7 +477,7 @@ there.
   height: 1em;
   border-radius: 50%;
   position: fixed;
-  top: 50%;
+  top: 40%;
   left: 50%;
   z-index: 9999;
   text-indent: -9999em;
