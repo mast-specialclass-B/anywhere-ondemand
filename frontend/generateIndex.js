@@ -5,7 +5,7 @@ async function uploadFile() {
     
 	formData.append("file", file);
     
-	const response = await fetch("http://127.0.0.1:5000/upload", {
+	const response = await fetch("http://127.0.0.1:5000/api/upload", {
         method: "POST",
 		body: formData,
 	});
@@ -94,7 +94,7 @@ async function putIndex(index){
     data = {'index': index, 'text': text};
     console.log(data);
     
-    const response = await fetch("http://127.0.0.1:5000/pull-out", {
+    const response = await fetch("http://127.0.0.1:5000/api/pull-out", {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
@@ -133,6 +133,47 @@ async function generateIndex(){
     loader.classList.add('done');
     const reloadButton = document.getElementById("reloadButton");
     if (reloadButton.disabled == true){
+        reloadButton.disabled = false;
+    }
+}
+
+async function reloadIndex() {
+    const text_element = document.getElementById("AllText");
+    const text = text_element.textContent;
+
+    removePreContent();
+
+    data = {'text': text};
+    
+    const response = await fetch("http://127.0.0.1:5000/api/reloadIndex", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+    });
+    
+    if (response.ok) {
+        const result = await response.json();
+        console.log("success");
+        return result;
+    } else {
+        console.error("File upload failed");
+        return null;
+    }
+}
+
+async function reGenerateIndex() {
+    const loader = document.getElementById('loadCircle');
+    if(loader.classList.contains("done")){
+        loader.classList.remove('done');
+    }
+    const reloadButton = document.getElementById("reloadButton");
+    reloadButton.disabled = true;
+    const json = await reloadIndex();
+    generateIndexTable(json);
+    loader.classList.add('done');
+   if (reloadButton.disabled == true){
         reloadButton.disabled = false;
     }
 }

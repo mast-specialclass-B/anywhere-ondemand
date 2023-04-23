@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-@app.route("/upload", methods=["POST"])
+@app.route("/api/upload", methods=["POST"])
 def generate_index():
     file = request.files["file"]
     filename = file.filename
@@ -14,7 +14,7 @@ def generate_index():
 
     transcript = transcript_file(filename)
 
-    content = "以下の文章についての目次を作成してください。また、出力は'1,○○\n2,××\n...'というような形で出力してください。" + transcript
+    content = "以下の文章についての目次を作成してください。また、出力は'1,○○\n2,××\n...'という形で出力してください。" + transcript
 
     completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": content}])
 
@@ -30,7 +30,7 @@ def generate_index():
 
     return result
 
-@app.route("/pull-out", methods=["POST"])
+@app.route("/api/pull-out", methods=["POST"])
 def pull_out_by_index():
     request_json = request.json
     index = request_json['index']
@@ -40,10 +40,29 @@ def pull_out_by_index():
 
     completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": content}])
     completion_content = completion.choices[0].message.content
-    print(completion_content)
 
     result = jsonify({'text': completion_content})
     print(result)
+
+    return result
+
+@app.route("/api/reloadIndex", methods=["POST"])
+def reloadIndex():
+    request_json = request.json
+    text = request_json['text']
+
+    content = "以下の文章についての目次を作成してください。また、出力は'1,○○\n2,××\n...'というような形で出力してください。" + text
+
+    completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": content}])
+    completion_content = completion.choices[0].message.content
+
+    index = []
+    indexs = completion_content.splitlines()
+    for item in indexs:
+        splited = item.split(',')
+        index.append({'index': splited[1]})
+
+    result = jsonify({'transcript': {'text': text}, 'index': index})
 
     return result
 
