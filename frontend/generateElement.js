@@ -55,7 +55,7 @@ function generateIndexTable(json) {
         var td = document.createElement('td');
         // td要素内にテキストを追加
         var indexname =  json['index'][i]['index'];
-        td.innerHTML = `<a onclick="putIndex('${indexname}')">${indexname}</a>`
+        td.innerHTML = `<a onclick="pullOutIndex('${indexname}')">${indexname}</a>`
         // td要素をtr要素の子要素に追加
         tr.appendChild(td);
         // tr要素をtable要素の子要素に追加
@@ -63,29 +63,28 @@ function generateIndexTable(json) {
     }
     // 生成したtable要素を追加する
     document.getElementById('indexTable').appendChild(table);
-    
-    
+}
+
+function generateAllText(json) {
     //p要素を作成
     var allText = document.createElement('p');
     allText.setAttribute('id', 'allTextContent');
     //文字要素を追加
     allText.textContent = json['transcript']['text'];
     document.getElementById("AllText").appendChild(allText);
-    
+}
+
+function generateExt(json) {
     var Ext = document.createElement("p");
     Ext.setAttribute('id', 'ExtContent');
-    Ext.textContent = "目次をクリックすると、ここに本文からの抜き出し部分が表示されます";
+    Ext.textContent = json['text'];
     document.getElementById("extraction").appendChild(Ext);
 }
 
-async function putIndex(index){  
+async function pullOutIndex(index){  
     const loader = document.getElementById('loadCircle');
     if(loader.classList.contains("done")){
         loader.classList.remove('done');
-    }
-    const preExt = document.getElementById('ExtContent');
-    if (preExt != null) {
-        preExt.remove();  
     }
 
     const text_element = document.getElementById("AllText");
@@ -103,16 +102,11 @@ async function putIndex(index){
     });
     
     if (response.ok) {
-        const result = await response.json();
+        const json = await response.json();
         console.log("success");
-        console.log(result['text']);
-        var Ext = document.createElement("p");
-        Ext.setAttribute('id', 'ExtContent');
-        Ext.textContent = result['text'];
-        document.getElementById("extraction").appendChild(Ext);
+        generateExt(json);
     } else {
         console.error("File upload failed");
-        return null;
     }
     loader.classList.add('done');
 };
@@ -130,6 +124,7 @@ async function generateIndex(){
     removePreContent();
     const json = await uploadFile();
     generateIndexTable(json);
+    generateAllText(json);
     loader.classList.add('done');
     const reloadButton = document.getElementById("reloadButton");
     if (reloadButton.disabled == true){
@@ -172,6 +167,7 @@ async function reGenerateIndex() {
     reloadButton.disabled = true;
     const json = await reloadIndex();
     generateIndexTable(json);
+    generateAllText(json);
     loader.classList.add('done');
    if (reloadButton.disabled == true){
         reloadButton.disabled = false;
