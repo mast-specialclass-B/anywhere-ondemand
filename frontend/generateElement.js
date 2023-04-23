@@ -204,3 +204,34 @@ async function reGenerateIndex() {
         reloadButton.disabled = false;
     }
 }
+
+async function search(keyword) {
+    loadCircleSwitch(true);
+    const json = await searchKeyword(keyword);
+    generateExt(json);
+    loadCircleSwitch(false);
+}
+
+async function searchKeyword(keyword){
+    const text_element = document.getElementById("AllText");
+    const text = text_element.textContent;
+
+    data = {'keyword': keyword, 'text': text};
+
+    const response = await fetch("http://127.0.0.1:5000/api/search", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+        const result = await response.json();
+        console.log("success");
+        return result;
+    } else {
+        console.error("error in searching");
+        return null;
+    }
+}

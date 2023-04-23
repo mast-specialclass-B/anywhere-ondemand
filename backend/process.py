@@ -16,7 +16,7 @@ def generate_index():
 
     content = "以下の文章についての目次を作成してください。また、出力は'1,○○\n2,××\n...'という形で出力してください。" + transcript
 
-    completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": content}])
+    completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", temperature=1.5, messages=[{"role": "user", "content": content}])
 
     completion_content = completion.choices[0].message.content
 
@@ -40,7 +40,7 @@ def pull_out_by_index():
 
     content = "以下の文章について、この目次に該当する部分を抜き出してください。出力は該当部分の抜出しのみにしてください。\n目次: " + index + "\n文章: " + text
 
-    completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": content}])
+    completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", temperature=1.5, messages=[{"role": "user", "content": content}])
     completion_content = completion.choices[0].message.content
 
     result = jsonify({'text': completion_content})
@@ -55,7 +55,7 @@ def reloadIndex():
 
     content = "以下の文章についての目次を作成してください。また、出力は'1,○○\n2,××\n...'というような形で出力してください。" + text
 
-    completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": content}])
+    completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", temperature=1.5, messages=[{"role": "user", "content": content}])
     completion_content = completion.choices[0].message.content
 
     index = []
@@ -65,6 +65,21 @@ def reloadIndex():
         index.append({'index': splited[1]})
 
     result = jsonify({'transcript': {'text': text}, 'index': index})
+
+    return result
+
+@app.route("/api/search", methods=["POST"])
+def searchKeyword():
+    request_json = request.json
+    text = request_json['text']
+    keyword = request_json['keyword']
+
+    content = "以下の文章について、このキーワードに該当する部分を抜き出してください。出力は該当部分の抜出しのみにし、'目次: 'などを含まないようにしてください。\nキーワード: " + keyword + "\n検索する文章: " + text
+    completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", temperature=1.5, messages=[{"role": "user", "content": content}])
+    completion_content = completion.choices[0].message.content
+
+    result = jsonify({'text': completion_content})
+    print(result)
 
     return result
 
