@@ -1,3 +1,28 @@
+function errorRaise(errorMessage){
+    loadCircleSwitch(false);
+    alert(errorMessage);
+}
+
+function isError(json, property, errorMessage1, errorMessage2){
+    if (json == null){
+        errorRaise(errorMessage1);
+        return true;
+    } else if (!json.hasOwnProperty(property)){
+        errorRaise(errorMessage2);
+        return true;
+    }
+    return false;
+}
+
+function loadCircleSwitch(bool){
+    const loader = document.getElementById('loadCircle');
+    if(bool == true && loader.classList.contains("done") == true){
+        loader.classList.remove("done")
+    }else if(bool == false && loader.classList.contains("done") == false){
+        loader.classList.add("done")
+    }
+}
+
 async function uploadFile() {
 	const fileInput=document.getElementById("fileInput");
 	const file = fileInput.files[0];
@@ -13,7 +38,6 @@ async function uploadFile() {
 	if (response.ok) {
         const result = await response.json();
 		console.log("success");
-		console.log(result);
         return result;
 	} else {
         console.error("File upload failed");
@@ -21,19 +45,21 @@ async function uploadFile() {
 	}
 }
 
-function removePreContent() {
-    const preTable = document.getElementById('indexTableContent')
-    if (preTable != null)
-        preTable.remove();
-    const preText = document.getElementById('allTextContent');
-    if (preText != null)
-        preText.remove();
-    const preExt = document.getElementById('ExtContent');
-    if (preExt != null)
-        preExt.remove();
+function removePreContent(id) {
+    const preContent = document.getElementById(id);
+    if (preContent != null)
+        preContent.remove();
 }
 
 function generateIndexTable(json) {
+    const errorMessage1 = "目次の生成に失敗しました。もう一度お試しください。";
+    //const errorMessage2 = "目次の生成に失敗しました。もう一度お試しください。";
+    if (isError(json, 'index', errorMessage1, errorMessage1)){
+        return ;
+    } else if (isError(json['index'][0], 'index', errorMessage1, errorMessage1)){
+        return ;
+    }
+    removePreContent('indexTableContent');
     // table要素を生成
     var table = document.createElement('table');
     table.setAttribute('id', 'indexTableContent');
@@ -47,7 +73,6 @@ function generateIndexTable(json) {
     
     // テーブル本体を作成
     for (var i = 0; i < json['index'].length; i++) {
-        console.log(json['index'][i]);
         // tr要素を生成
         var tr = document.createElement('tr');
         // th・td部分のループ
@@ -55,7 +80,7 @@ function generateIndexTable(json) {
         var td = document.createElement('td');
         // td要素内にテキストを追加
         var indexname =  json['index'][i]['index'];
-        td.innerHTML = `<a onclick="pullOutIndex('${indexname}')">${indexname}</a>`
+        td.innerHTML = `<a onclick="generatePullOutIndex('${indexname}')">${indexname}</a>`
         // td要素をtr要素の子要素に追加
         tr.appendChild(td);
         // tr要素をtable要素の子要素に追加
@@ -66,6 +91,14 @@ function generateIndexTable(json) {
 }
 
 function generateAllText(json) {
+    const errorMessage1 = "文字起こしの生成に失敗しました。もう一度お試しください。";
+    //const errorMessage2 = "文字起こしの生成に失敗しました。もう一度お試しください。"
+    if (isError(json, 'transcript', errorMessage1, errorMessage1)){
+        return ;
+    } else if (isError(json['transcript'], 'text', errorMessage1, errorMessage1)){
+        return ;
+    }
+    removePreContent('allTextContent');
     //p要素を作成
     var allText = document.createElement('p');
     allText.setAttribute('id', 'allTextContent');
@@ -75,23 +108,30 @@ function generateAllText(json) {
 }
 
 function generateExt(json) {
+    const errorMessage1 = "目次に該当する箇所の抜き出しに失敗しました。もう一度お試しください。";
+    //const errorMessage2 = "目次に該当する箇所の抜き出しに失敗しました。もう一度お試しください。";
+    if (isError(json, 'text', errorMessage1, errorMessage1)){
+        return ;
+    } 
+    removePreContent('ExtContent');
     var Ext = document.createElement("p");
     Ext.setAttribute('id', 'ExtContent');
     Ext.textContent = json['text'];
     document.getElementById("extraction").appendChild(Ext);
 }
 
-async function pullOutIndex(index){  
-    const loader = document.getElementById('loadCircle');
-    if(loader.classList.contains("done")){
-        loader.classList.remove('done');
-    }
+async function generatePullOutIndex(index){
+    loadCircleSwitch(true);
+    const json = await pullOutIndex(index);
+    generateExt(json);
+    loadCircleSwitch(false);
+}
 
+async function pullOutIndex(index){  
     const text_element = document.getElementById("AllText");
     const text = text_element.textContent;
 
     data = {'index': index, 'text': text};
-    console.log(data);
     
     const response = await fetch("http://127.0.0.1:5000/api/pull-out", {
         method: "POST",
@@ -104,28 +144,24 @@ async function pullOutIndex(index){
     if (response.ok) {
         const json = await response.json();
         console.log("success");
-        generateExt(json);
+        return json;
     } else {
         console.error("File upload failed");
+        return null;
     }
-    loader.classList.add('done');
 };
 
 const reloadButton = document.getElementById("reloadButton");
 reloadButton.disabled = true;
 
 async function generateIndex(){
-    const loader = document.getElementById('loadCircle');
-    if(loader.classList.contains("done")){
-        loader.classList.remove('done');
-    }
+    loadCircleSwitch(true);
     const uploadButton = document.getElementById("uploadButton");
     uploadButton.disabled = true;
-    removePreContent();
     const json = await uploadFile();
     generateIndexTable(json);
     generateAllText(json);
-    loader.classList.add('done');
+    loadCircleSwitch(false);
     const reloadButton = document.getElementById("reloadButton");
     if (reloadButton.disabled == true){
         reloadButton.disabled = false;
@@ -135,8 +171,6 @@ async function generateIndex(){
 async function reloadIndex() {
     const text_element = document.getElementById("AllText");
     const text = text_element.textContent;
-
-    removePreContent();
 
     data = {'text': text};
     
@@ -159,17 +193,14 @@ async function reloadIndex() {
 }
 
 async function reGenerateIndex() {
-    const loader = document.getElementById('loadCircle');
-    if(loader.classList.contains("done")){
-        loader.classList.remove('done');
-    }
+    loadCircleSwitch(true);
     const reloadButton = document.getElementById("reloadButton");
     reloadButton.disabled = true;
     const json = await reloadIndex();
     generateIndexTable(json);
     generateAllText(json);
-    loader.classList.add('done');
-   if (reloadButton.disabled == true){
+    loadCircleSwitch(false);
+    if (reloadButton.disabled == true){
         reloadButton.disabled = false;
     }
 }
