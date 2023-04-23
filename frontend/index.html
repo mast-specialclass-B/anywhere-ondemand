@@ -45,7 +45,14 @@
 			<div id ='indexTable'></div>
 			<br>
 			<button onclick="reGenerateIndex()" class="button-primary u-full-width" id = "reloadButton" >reload</button>
-			<br><br>
+			<br>
+			<br>
+			<div class="row">
+				<div class="nine columns"><input type="text" placeholder="検索語を入力" id="search_word" class="u-full-width"></div>
+				<div class="three columns"><button onclick="const searchWord = document.getElementById('search_word') ;search(searchWord.value)" class="button-primary u-full-width" id = "search" >Search</button></div>
+			</div>
+			<br>
+			<br>
 			<h3>目次部分の抜き出し</h3>
 			<div class = "box">
 				<div id = "extraction">
