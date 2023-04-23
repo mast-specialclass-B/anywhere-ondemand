@@ -28,6 +28,8 @@ def generate_index():
 
     result = jsonify({'transcript': {'text': transcript}, 'index': index})
 
+    os.remove(filename)
+
     return result
 
 @app.route("/api/pull-out", methods=["POST"])
