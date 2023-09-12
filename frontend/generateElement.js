@@ -83,8 +83,8 @@ function generateSummary(json) {
 
 async function letGenerateSummary(){
     loadCircleSwitch(true);
-    const json = await requestTrans();
-    generateTranslate(json);
+    const json = await requestSummary();
+    generateSummary(json);
     loadCircleSwitch(false);
 }
 
@@ -92,7 +92,7 @@ async function requestSummary(){
     const text_element = document.getElementById("AllText");
     const text = text_element.textContent;
 
-    data = {'text': text};
+    data = {'text': text, 'tone': 'うんち'};
     
     const response = await fetch("http://127.0.0.1:5000/api/summary", {
         method: "POST",
