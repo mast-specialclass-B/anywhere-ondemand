@@ -121,6 +121,37 @@ function generateTranslate(json) {
     document.getElementById("translatedText").appendChild(Ext);
 }
 
+async function preGenerateTrans(){
+    loadCircleSwitch(true);
+    const json = await requestTrans();
+    generateTranslate(json);
+    loadCircleSwitch(false);
+}
+
+async function requestTrans(){  
+    const text_element = document.getElementById("AllText");
+    const text = text_element.textContent;
+
+    data = {'text': text};
+    
+    const response = await fetch("http://127.0.0.1:5000/api/translate", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+    });
+    
+    if (response.ok) {
+        const json = await response.json();
+        console.log("success");
+        return json;
+    } else {
+        console.error("File upload failed");
+        return null;
+    }
+};
+
 
 function generateExt(json) {
     const errorMessage1 = "目次に該当する箇所の抜き出しに失敗しました。もう一度お試しください。";
@@ -179,13 +210,12 @@ async function generateIndex(){
     const json = await uploadFile();
     generateIndexTable(json);
     generateAllText(json);
-    generateTranslate(json);
     loadCircleSwitch(false);
     const reloadSummaryButton = document.getElementById("reloadSummaryButton");
     if (reloadSummaryButton.disabled == true){
         reloadSummaryButton.disabled = false;
     }
-    const reloadTranslateButton = document.getElementById("reloadSummaryButton");
+    const reloadTranslateButton = document.getElementById("reloadTranslateButton");
     if (reloadTranslateButton.disabled == true){
         reloadTranslateButton.disabled = false;
     }
@@ -225,19 +255,6 @@ async function reGenerateSummary() {
     loadCircleSwitch(false);
     if (reloadSummaryButton.disabled == true){
         reloadSummaryButton.disabled = false;
-    }
-}
-
-async function reGenerateTranslate() {
-    loadCircleSwitch(true);
-    const reloadTranslateButton = document.getElementById("reloadTranslateButton");
-    reloadTranslateButton.disabled = true;
-    const json = await reloadIndex();
-    generateIndexTable(json);
-    generateAllText(json);
-    loadCircleSwitch(false);
-    if (reloadTranslateButton.disabled == true){
-        reloadTranslateButton.disabled = false;
     }
 }
 
