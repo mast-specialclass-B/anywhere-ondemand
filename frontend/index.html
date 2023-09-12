@@ -20,50 +20,68 @@
 		<div class="container">
 			<div class="loader done" id ="loadCircle"></div>
 			<br>
-			<h1>Transcript Index</h1>
-			<br>
-			<div class="uploader">
-				<input type="file" accept="audio/*" id = "fileInput" onchange="ableButton()"/>
-			</div>
-			<table class="u-full-width">
-				<thead>
-				  <tr>
-					<th>dropped / selected file</th>
-				  </tr>
-				</thead>
-				<tbody>
-				  <tr>
-					<td><span class="dropped-file"></span></td>
-				  </tr>
-				</tbody>
-			  </table>
-			<br>
-			<button onclick="generateIndex()" class="button-primary u-full-width" id = "uploadButton" >Upload</button>
-			<br>
-			<br>
-			<h3>目次</h3>
-			<div id ='indexTable'></div>
-			<br>
-			<button onclick="reGenerateIndex()" class="button-primary u-full-width" id = "reloadButton" >reload</button>
-			<br>
+			<h1>いつでも オンデマンド授業</h1>
 			<br>
 			<div class="row">
-				<div class="nine columns"><input type="text" placeholder="検索語を入力" id="search_word" class="u-full-width"></div>
-				<div class="three columns"><button onclick="const searchWord = document.getElementById('search_word') ;search(searchWord.value)" class="button-primary u-full-width" id = "search" >Search</button></div>
+				<div class="six columns">
+					<div class="uploader">
+						<input type="file" accept="audio/*" id = "fileInput" onchange="ableButton()"/>
+					</div>
+					<table class="u-full-width">
+						<thead>
+						<tr>
+							<th>dropped / selected file</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr>
+							<td><span class="dropped-file"></span></td>
+						</tr>
+						</tbody>
+					</table>
+					<br>
+					<button onclick="generateIndex()" class="button-primary u-full-width" id = "uploadButton" >Upload</button>
+				</div>
+				<div class="six columns">
+					<h2>Record</h2>
+					<br>
+					<div id="buttons" class = "row">
+						<button class="button-primary one-half column" id="startRecord">Record</button>
+						<button class="button-primary one-half column" id="stopRecord">Stop</button>
+					</div>
+					<script src="recording.js"></script>
+				</div>
 			</div>
 			<br>
 			<br>
-			<h3>目次部分の抜き出し</h3>
+			<h3>本文</h3>
+			<div class="box">
+			<div id = "AllText"></div>
+			</div>
+			
+			<h3>要約</h3>
+			<div class="box">
+			<div id = "AllText"></div>
+			</div>
+			<br>
+			<button onclick="reGenerateSummary()" class="button-primary u-full-width" id = "reloadSummaryButton" >reload</button>
+			<br>
+			<br>
+			<h3>翻訳</h3>
 			<div class = "box">
 				<div id = "extraction">
 					<p id="ExtContent" value="目次をクリックすると、ここに本文からの抜き出し部分が表示されます"></p>
 				</div>
 			</div>
+			<select name="example" class="five columns">
+				<option>Japanese</option>
+				<option>English</option>
+				<option>Chinsese</option>
+				<option>Korean</option>
+			</select>
+			<button onclick="reGenerateTranslate()" class="five columns button-primary u-pull-right" id = "reloadButton" >reload</button>
 			<br>
-			<h3>本文</h3>
-			<div class="box">
-				<div id = "AllText"></div>
-			</div>
+			<br>
 		</div>
 		<script src="generateElement.js"></script>
 		<script src="dropFileData.js"></script>
