@@ -111,19 +111,20 @@ function generateAllText(json) {
 function generateTranslate(json) {
     const errorMessage1 = "翻訳の生成に失敗しました。もう一度お試しください。";
     //const errorMessage2 = "翻訳こんにゃくが故障しました。もう一度お試しください。"
-    if (isError(json, 'text', errorMessage1, errorMessage1)){
+    if (isError(json, 'translated_text', errorMessage1, errorMessage1)){
         return ;
     } 
     removePreContent('TransContent');
     var Ext = document.createElement("p");
     Ext.setAttribute('id', 'TransContent');
-    Ext.textContent = json['text'];
+    Ext.textContent = json['translated_text'];
     document.getElementById("translatedText").appendChild(Ext);
 }
 
 async function preGenerateTrans(){
     loadCircleSwitch(true);
     const json = await requestTrans();
+    console.log(json);
     generateTranslate(json);
     loadCircleSwitch(false);
 }
@@ -132,14 +133,13 @@ async function requestTrans(){
     const text_element = document.getElementById("AllText");
     const text = text_element.textContent;
 
-    data = {'text': text};
+    data = {'text': text,'target_language' : '英語'};
     
     const response = await fetch("http://127.0.0.1:5000/api/translate", {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
         },
-        target_language : "英語",
         body: JSON.stringify(data),
     });
     
