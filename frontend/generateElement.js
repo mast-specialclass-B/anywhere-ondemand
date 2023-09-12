@@ -139,6 +139,7 @@ async function requestTrans(){
         headers: {
             'Content-Type': 'application/json'
         },
+        target_language : "英語",
         body: JSON.stringify(data),
     });
     
