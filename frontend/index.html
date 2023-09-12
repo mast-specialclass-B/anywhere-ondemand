@@ -63,20 +63,22 @@
 			
 			<h3>要約</h3>
 			<div class="box">
-			<div id = "Summary"></div>
+			<div id = "summary">
+				<p id="Summary" value="ボタンを押すとここに要約が表示されます"></p>
+			</div>
 			</div>
 			<br>
-			<button onclick="reGenerateSummary()" class="button-primary u-full-width" id = "reloadSummaryButton" >reload</button>
+			<button onclick="letGenerateSummary()" class="button-primary u-full-width" id = "reloadSummaryButton" >Get summary</button>
 			<br>
 			<br>
 			<h3>翻訳</h3>
 			<div class = "box">
 				<div id = "translatedText">
-					<p id="TransContent" value="ここに翻訳が表示されます"></p>
+					<p id="TransContent" value="ボタンを押すとここに翻訳が表示されます"></p>
 				</div>
 			</div>
 			<br>
-			<button onclick="preGenerateTrans()" class="button-primary u-full-width" id = "reloadTranslateButton" >reload</button>
+			<button onclick="preGenerateTrans()" class="button-primary u-full-width" id = "reloadTranslateButton" >Translate</button>
 			<br>
 			<br>
 		</div>
