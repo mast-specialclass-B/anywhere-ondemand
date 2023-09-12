@@ -45,24 +45,24 @@
 			<div class="box">
 			<div id = "AllText"></div>
 			</div>
-			<h3>目次</h3>
-			<div id ='indexTable'></div>
+			
+			<h3>要約</h3>
+			<div class="box">
+			<div id = "AllText"></div>
+			</div>
 			<br>
 			<button onclick="reGenerateIndex()" class="button-primary u-full-width" id = "reloadButton" >reload</button>
 			<br>
 			<br>
-			<div class="row">
-				<div class="nine columns"><input type="text" placeholder="検索語を入力" id="search_word" class="u-full-width"></div>
-				<div class="three columns"><button onclick="const searchWord = document.getElementById('search_word') ;search(searchWord.value)" class="button-primary u-full-width" id = "search" >Search</button></div>
-			</div>
-			<br>
-			<br>
-			<h3>目次部分の抜き出し</h3>
+			<h3>翻訳</h3>
 			<div class = "box">
 				<div id = "extraction">
 					<p id="ExtContent" value="目次をクリックすると、ここに本文からの抜き出し部分が表示されます"></p>
 				</div>
 			</div>
+			<br>
+			<button onclick="reGenerateTranslate()" class="button-primary u-full-width" id = "reloadButton" >reload</button>
+			<br>
 			<br>
 		</div>
 		<script src="generateElement.js"></script>
