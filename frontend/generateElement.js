@@ -291,3 +291,29 @@ async function searchKeyword(keyword){
         return null;
     }
 }
+
+async function translateText() {
+    const text_element = document.getElementById("AllText");
+    const language_element = document.getElementById("TargetLanguage");
+    const text = text_element.textContent;
+    const target_language = language_element.value;
+
+    data = {'text': text, 'target_language': target_language};
+
+    const response = await fetch("http://127.0.0.1:5000/api/translate", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+        const result = await response.json();
+        console.log("Translation success");
+        return result;
+    } else {
+        console.error("Translation failed");
+        return null;
+    }
+}
