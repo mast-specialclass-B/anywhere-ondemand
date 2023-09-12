@@ -50,7 +50,7 @@ function removePreContent(id) {
     if (preContent != null)
         preContent.remove();
 }
-
+/*
 function generateIndexTable(json) {
     const errorMessage1 = "目次の生成に失敗しました。もう一度お試しください。";
     //const errorMessage2 = "目次の生成に失敗しました。もう一度お試しください。";
@@ -89,6 +89,7 @@ function generateIndexTable(json) {
     // 生成したtable要素を追加する
     document.getElementById('indexTable').appendChild(table);
 }
+ */
 
 function generateAllText(json) {
     const errorMessage1 = "文字起こしの生成に失敗しました。もう一度お試しください。";
@@ -106,6 +107,52 @@ function generateAllText(json) {
     allText.textContent = json['transcript']['text'];
     document.getElementById("AllText").appendChild(allText);
 }
+
+
+function generateTranslate(json) {
+    const errorMessage1 = "翻訳の生成に失敗しました。もう一度お試しください。";
+    //const errorMessage2 = "翻訳こんにゃくが故障しました。もう一度お試しください。"
+    if (isError(json, 'text', errorMessage1, errorMessage1)){
+        return ;
+    } 
+    removePreContent('TransContent');
+    var Ext = document.createElement("p");
+    Ext.setAttribute('id', 'TransContent');
+    Ext.textContent = json['text'];
+    document.getElementById("translatedText").appendChild(Ext);
+}
+
+async function preGenerateTrans(){
+    loadCircleSwitch(true);
+    const json = await requestTrans();
+    generateTranslate(json);
+    loadCircleSwitch(false);
+}
+
+async function requestTrans(){  
+    const text_element = document.getElementById("AllText");
+    const text = text_element.textContent;
+
+    data = {'text': text};
+    
+    const response = await fetch("http://127.0.0.1:5000/api/translate", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+    });
+    
+    if (response.ok) {
+        const json = await response.json();
+        console.log("success");
+        return json;
+    } else {
+        console.error("File upload failed");
+        return null;
+    }
+};
+
 
 function generateExt(json) {
     const errorMessage1 = "目次に該当する箇所の抜き出しに失敗しました。もう一度お試しください。";
@@ -151,22 +198,31 @@ async function pullOutIndex(index){
     }
 };
 
-const reloadButton = document.getElementById("reloadButton");
-reloadButton.disabled = true;
+const reloadSummaryButton = document.getElementById("reloadSummaryButton");
+reloadSummaryButton.disabled = true;
+
+const reloadTranslateButton = document.getElementById("reloadTranslateButton");
+reloadTranslateButton.disabled = true;
 
 async function generateIndex(){
     loadCircleSwitch(true);
     const uploadButton = document.getElementById("uploadButton");
     uploadButton.disabled = true;
     const json = await uploadFile();
-    generateIndexTable(json);
+    //generateIndexTable(json);
     generateAllText(json);
     loadCircleSwitch(false);
-    const reloadButton = document.getElementById("reloadButton");
-    if (reloadButton.disabled == true){
-        reloadButton.disabled = false;
+    const reloadSummaryButton = document.getElementById("reloadSummaryButton");
+    if (reloadSummaryButton.disabled == true){
+        reloadSummaryButton.disabled = false;
+    }
+    const reloadTranslateButton = document.getElementById("reloadTranslateButton");
+    if (reloadTranslateButton.disabled == true){
+        reloadTranslateButton.disabled = false;
     }
 }
+/*
+ */
 
 async function reloadIndex() {
     const text_element = document.getElementById("AllText");
@@ -183,7 +239,7 @@ async function reloadIndex() {
     });
     
     if (response.ok) {
-        const result = await response.json();
+        const result = await response.json();reloadButton
         console.log("success");
         return result;
     } else {
@@ -192,16 +248,16 @@ async function reloadIndex() {
     }
 }
 
-async function reGenerateIndex() {
+async function reGenerateSummary() {
     loadCircleSwitch(true);
-    const reloadButton = document.getElementById("reloadButton");
-    reloadButton.disabled = true;
+    const reloadSummaryButton = document.getElementById("reloadSummaryButton");
+    reloadSummaryButton.disabled = true;
     const json = await reloadIndex();
-    generateIndexTable(json);
+    //generateIndexTable(json);
     generateAllText(json);
     loadCircleSwitch(false);
-    if (reloadButton.disabled == true){
-        reloadButton.disabled = false;
+    if (reloadSummaryButton.disabled == true){
+        reloadSummaryButton.disabled = false;
     }
 }
 
@@ -232,6 +288,32 @@ async function searchKeyword(keyword){
         return result;
     } else {
         console.error("error in searching");
+        return null;
+    }
+}
+
+async function translateText() {
+    const text_element = document.getElementById("AllText");
+    const language_element = document.getElementById("TargetLanguage");
+    const text = text_element.textContent;
+    const target_language = language_element.value;
+
+    data = {'text': text, 'target_language': target_language};
+
+    const response = await fetch("http://127.0.0.1:5000/api/translate", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+        const result = await response.json();
+        console.log("Translation success");
+        return result;
+    } else {
+        console.error("Translation failed");
         return null;
     }
 }

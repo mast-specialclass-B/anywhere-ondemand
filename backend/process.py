@@ -2,31 +2,33 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import openai
 import os
+import base64
 
 app = Flask(__name__)
 CORS(app)
 
-@app.route("/api/upload", methods=["POST"])#アップロードされたファイルをフロントから受け取り、音声を文章化して目次を生成しまたフロントに返す
-def generate_index():
+@app.route("/api/upload", methods=["POST"])
+def generate():
     file = request.files["file"]
     filename = file.filename
     file.save(filename)
 
     transcript = transcript_file(filename)#ここにテキストを置いている
+    result = jsonify({'transcript': {'text': transcript}})
 
-    content = "以下の文章についての目次を作成してください。また、出力は'1,○○\n2,××\n...'という形で出力してください。" + transcript#実際にchatGPTに投げるスクリプト
+    os.remove(filename)
+    return result
 
-    completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", temperature=1.5, messages=[{"role": "user", "content": content}])
+@app.route("/api/upload-blob", methods=["POST"])
+def generate_from_blob():
+    file = request.files["file"].read()
+    filename = "file.webm"
+    
+    blob_to_webm(file, filename)
+    
+    transcript = transcript_file(filename)
 
-    completion_content = completion.choices[0].message.content#19行目のコンテンツの内容を取り出して保存
-
-    index = []
-    indexs = completion_content.splitlines()#completion_contentを1行ごとに分けている
-    for item in indexs:
-        splited = item.split(',')
-        index.append({'index': splited[1]})
-
-    result = jsonify({'transcript': {'text': transcript}, 'index': index})#JSON形式でクライアントに返す
+    result = jsonify({'transcript': {'text': transcript}})
 
     os.remove(filename)#保存した音声ファイルを削除
 
@@ -48,28 +50,19 @@ def pull_out_by_index():
 
     return result
 
-@app.route("/api/reloadIndex", methods=["POST"])#pull-outでの目次が気に入らないときに、もう一度生成できる
-def reloadIndex():
+@app.route("/api/reloadIndex", methods=["POST"])
+def reload_index():
     request_json = request.json
     text = request_json['text']
 
-    content = "以下の文章についての目次を作成してください。また、出力は'1,○○\n2,××\n...'というような形で出力してください。" + text
-
-    completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", temperature=1.5, messages=[{"role": "user", "content": content}])
-    completion_content = completion.choices[0].message.content
-
-    index = []
-    indexs = completion_content.splitlines()
-    for item in indexs:
-        splited = item.split(',')
-        index.append({'index': splited[1]})
+    index = generate_index(text)
 
     result = jsonify({'transcript': {'text': text}, 'index': index})
 
     return result
 
-@app.route("/api/search", methods=["POST"])#キーワードの抜き出し
-def searchKeyword():
+@app.route("/api/search", methods=["POST"])
+def search_by_keyword():
     request_json = request.json
     text = request_json['text']
     keyword = request_json['keyword']
@@ -82,6 +75,7 @@ def searchKeyword():
     print(result)
 
     return result
+
 
 @app.route("/api/summary", methods=["POST"])#要約作成
 def summary():
@@ -104,11 +98,44 @@ def summary():
 
     return result
 
-def transcript_file(filename):#ここでファイルの受け取りおよび文字起こし
+@app.route("/api/translate", methods=["POST"])
+def translateText():
+    request_json = request.json
+    text = request_json['text']
+    target_language = request.json["target_language"]
+
+    content = f"以下の文章を英語に翻訳してください:{text}"
+    completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", temperature=1, messages=[{"role": "user", "content": content}])
+    translated_text = completion.choices[0].message.content
+
+    result = jsonify({'original_text': text, 'translated_text': translated_text})
+    return result
+
+def transcript_file(filename):
+    print(filename)
     openai.api_key = os.environ['OPENAI_API_KEY']
-    filename = open(filename, "rb")
-    transcript = openai.Audio.transcribe("whisper-1", filename)
+    file = open(filename, "rb")
+    transcript = openai.Audio.transcribe("whisper-1", file)
     return transcript['text']
+
+def generate_index(transcript):
+    content = "以下の文章についての目次を作成してください。また、出力は'1,○○\n2,××\n...'という形で出力してください。" + transcript
+
+    completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", temperature=1.5, messages=[{"role": "user", "content": content}])
+
+    completion_content = completion.choices[0].message.content
+
+    index = []
+    indexs = completion_content.splitlines()
+    for item in indexs:
+        splited = item.split(',')
+        index.append({'index': splited[1]})
+
+    return index
+
+def blob_to_webm(file, filename):
+    with open(filename, 'wb') as f_vid:
+        f_vid.write(file)
 
 if __name__ == "__main__":
     app.run()
