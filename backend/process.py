@@ -83,6 +83,19 @@ def searchKeyword():
 
     return result
 
+@app.route("/api/translate", methods=["POST"])
+def translateText():
+    request_json = request.json
+    text = request_json['text']
+    target_language = request.json["target_language"]
+
+    content = f"以下の文章を英語に翻訳してください:{text}"
+    completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", temperature=1, messages=[{"role": "user", "content": content}])
+    translated_text = completion.choices[0].message.content
+
+    result = jsonify({'original_text': text, 'translated_text': translated_text})
+    return result
+
 def transcript_file(filename):
     openai.api_key = os.environ['OPENAI_API_KEY']
     filename = open(filename, "rb")
