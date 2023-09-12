@@ -23,7 +23,7 @@ def generate():
 
     return result
 
-@app.route("/api/upload-blob", method=["POST"])
+@app.route("/api/upload-blob", methods=["POST"])
 def generate_from_blob():
     file = request.files["file"].read()
     filename = "file.webm"
