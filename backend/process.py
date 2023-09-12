@@ -15,21 +15,19 @@ def generate():
 
     transcript = transcript_file(filename)
 
-    # index = generate_index(transcript)
-
     result = jsonify({'transcript': {'text': transcript}})
 
     os.remove(filename)
 
     return result
 
-@app.route("/api/upload-blob", method=["POST"])
+@app.route("/api/upload-blob", methods=["POST"])
 def generate_from_blob():
     file = request.files["file"].read()
     filename = "file.webm"
     
     blob_to_webm(file, filename)
-
+    
     transcript = transcript_file(filename)
 
     result = jsonify({'transcript': {'text': transcript}})
@@ -81,9 +79,10 @@ def search_by_keyword():
     return result
 
 def transcript_file(filename):
+    print(filename)
     openai.api_key = os.environ['OPENAI_API_KEY']
-    filename = open(filename, "rb")
-    transcript = openai.Audio.transcribe("whisper-1", filename)
+    file = open(filename, "rb")
+    transcript = openai.Audio.transcribe("whisper-1", file)
     return transcript['text']
 
 def generate_index(transcript):
@@ -103,7 +102,7 @@ def generate_index(transcript):
 
 def blob_to_webm(file, filename):
     with open(filename, 'wb') as f_vid:
-        f_vid.write(base64.b64encode(file))
+        f_vid.write(file)
 
 if __name__ == "__main__":
     app.run()
