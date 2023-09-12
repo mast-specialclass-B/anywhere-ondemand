@@ -9,6 +9,8 @@ if (navigator.mediaDevices.getUserMedia) {
   const constraints = { audio: true };
   let chunks = [];
 
+  
+
   let onSuccess = function(stream) {
     const mediaRecorder = new MediaRecorder(stream);
 
@@ -38,29 +40,9 @@ if (navigator.mediaDevices.getUserMedia) {
 
     mediaRecorder.onstop = function(e) {
       console.log("data available after MediaRecorder.stop() called.");
-
-      const clipName = prompt('Enter a name for your sound clip?','My unnamed clip');
-
-      const clipContainer = document.createElement('article');
-      const clipLabel = document.createElement('p');
       const audio = document.createElement('audio');
-      const deleteButton = document.createElement('button');
 
-      clipContainer.classList.add('clip');
-      audio.setAttribute('controls', '');
-      deleteButton.textContent = 'Delete';
-      deleteButton.className = 'delete';
 
-      if(clipName === null) {
-        clipLabel.textContent = 'My unnamed clip';
-      } else {
-        clipLabel.textContent = clipName;
-      }
-
-      clipContainer.appendChild(audio);
-      clipContainer.appendChild(clipLabel);
-      clipContainer.appendChild(deleteButton);
-      //soundClips.appendChild(clipContainer);
 
       audio.controls = true;
       const blob = new Blob(chunks, { 'type' : 'audio/webm; codecs=opus' });
@@ -69,20 +51,7 @@ if (navigator.mediaDevices.getUserMedia) {
       audio.src = audioURL;
       console.log("recorder stopped");
       console.log(audioURL);
-
-      deleteButton.onclick = function(e) {
-        e.target.closest(".clip").remove();
-      }
-
-      clipLabel.onclick = function() {
-        const existingName = clipLabel.textContent;
-        const newClipName = prompt('Enter a new name for your sound clip?');
-        if(newClipName === null) {
-          clipLabel.textContent = existingName;
-        } else {
-          clipLabel.textContent = newClipName;
-        }
-      }
+      uploadRecordingFile(audioURL);
     }
 
     mediaRecorder.ondataavailable = function(e) {
@@ -98,4 +67,27 @@ if (navigator.mediaDevices.getUserMedia) {
 
 } else {
    console.log('サポート外のブラウザです');
+}
+
+async function uploadRecordingFile(fileURI) {
+	const file = fileURI;
+	const formData=new FormData();
+
+	formData.append("file", file);
+
+	const response = await fetch("http://127.0.0.1:5000/api/upload", {
+		method: "POST",
+        headers:{
+            'Content-Type': 'blob'
+        },
+		body: formData,
+	});
+
+	if (response.ok) {
+		const result = await response.json();
+		console.log("success");
+		console.log(result['index'][0]);
+	} else {
+		console.error("File upload failed");
+	}
 }
