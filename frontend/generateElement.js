@@ -108,7 +108,6 @@ function generateAllText(json) {
     document.getElementById("AllText").appendChild(allText);
 }
 
-
 function generateTranslate(json) {
     const errorMessage1 = "翻訳の生成に失敗しました。もう一度お試しください。";
     //const errorMessage2 = "翻訳こんにゃくが故障しました。もう一度お試しください。"
@@ -221,8 +220,6 @@ async function generateIndex(){
         reloadTranslateButton.disabled = false;
     }
 }
-/*
- */
 
 async function reloadIndex() {
     const text_element = document.getElementById("AllText");
