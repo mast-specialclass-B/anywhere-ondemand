@@ -374,6 +374,9 @@ form {
   float: right; }
 .u-pull-left {
   float: left; }
+.u-locate-center {
+  text-align: center;
+}
 
 
 /* Misc
