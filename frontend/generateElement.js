@@ -83,8 +83,8 @@ function generateSummary(json) {
 
 async function letGenerateSummary(){
     loadCircleSwitch(true);
-    const json = await requestTrans();
-    generateTranslate(json);
+    const json = await requestSummary();
+    generateSummary(json);
     loadCircleSwitch(false);
 }
 
