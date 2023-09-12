@@ -87,20 +87,6 @@ def searchKeyword():
 def summary():
     request_json = request.json
     text = request_json['text']
-
-    content = "以下の文章について、要約を作成してください。出力は'要約: 'などを含まないようにしてください。\n要約する文章: " + text
-    completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", temperature=1.5, messages=[{"role": "user", "content": content}])
-    completion_content = completion.choices[0].message.content
-
-    result = jsonify({'text': completion_content})
-    print(result)
-
-    return result
-
-@app.route("/api/summary", methods=["POST"])#要約作成
-def summary():
-    request_json = request.json
-    text = request_json['text']
     tone =request_json['tone']#選択肢はnormal,gal,ojisanでお願いします。
     if not tone or tone == "normal":
         tone=""
