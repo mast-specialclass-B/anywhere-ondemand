@@ -50,7 +50,7 @@ function removePreContent(id) {
     if (preContent != null)
         preContent.remove();
 }
-
+/*
 function generateIndexTable(json) {
     const errorMessage1 = "目次の生成に失敗しました。もう一度お試しください。";
     //const errorMessage2 = "目次の生成に失敗しました。もう一度お試しください。";
@@ -89,6 +89,7 @@ function generateIndexTable(json) {
     // 生成したtable要素を追加する
     document.getElementById('indexTable').appendChild(table);
 }
+ */
 
 function generateAllText(json) {
     const errorMessage1 = "文字起こしの生成に失敗しました。もう一度お試しください。";
@@ -208,7 +209,7 @@ async function generateIndex(){
     const uploadButton = document.getElementById("uploadButton");
     uploadButton.disabled = true;
     const json = await uploadFile();
-    generateIndexTable(json);
+    //generateIndexTable(json);
     generateAllText(json);
     loadCircleSwitch(false);
     const reloadSummaryButton = document.getElementById("reloadSummaryButton");
@@ -220,6 +221,8 @@ async function generateIndex(){
         reloadTranslateButton.disabled = false;
     }
 }
+/*
+ */
 
 async function reloadIndex() {
     const text_element = document.getElementById("AllText");
@@ -250,7 +253,7 @@ async function reGenerateSummary() {
     const reloadSummaryButton = document.getElementById("reloadSummaryButton");
     reloadSummaryButton.disabled = true;
     const json = await reloadIndex();
-    generateIndexTable(json);
+    //generateIndexTable(json);
     generateAllText(json);
     loadCircleSwitch(false);
     if (reloadSummaryButton.disabled == true){
