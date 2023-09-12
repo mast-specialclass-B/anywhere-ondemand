@@ -22,23 +22,36 @@
 			<br>
 			<h1>いつでも オンデマンド授業</h1>
 			<br>
-			<div class="uploader">
-				<input type="file" accept="audio/*" id = "fileInput" onchange="ableButton()"/>
+			<div class="row">
+				<div class="six columns">
+					<div class="uploader">
+						<input type="file" accept="audio/*" id = "fileInput" onchange="ableButton()"/>
+					</div>
+					<table class="u-full-width">
+						<thead>
+						<tr>
+							<th>dropped / selected file</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr>
+							<td><span class="dropped-file"></span></td>
+						</tr>
+						</tbody>
+					</table>
+					<br>
+					<button onclick="generateIndex()" class="button-primary u-full-width" id = "uploadButton" >Upload</button>
+				</div>
+				<div class="six columns">
+					<h2>Record</h2>
+					<br>
+					<div id="buttons" class = "row">
+						<button class="button-primary one-half column" id="startRecord">Record</button>
+						<button class="button-primary one-half column" id="stopRecord">Stop</button>
+					</div>
+					<script src="recording.js"></script>
+				</div>
 			</div>
-			<table class="u-full-width">
-				<thead>
-				  <tr>
-					<th>dropped / selected file</th>
-				  </tr>
-				</thead>
-				<tbody>
-				  <tr>
-					<td><span class="dropped-file"></span></td>
-				  </tr>
-				</tbody>
-			  </table>
-			<br>
-			<button onclick="generateIndex()" class="button-primary u-full-width" id = "uploadButton" >Upload</button>
 			<br>
 			<br>
 			<h3>本文</h3>

@@ -378,6 +378,9 @@ form {
   float: right; }
 .u-pull-left {
   float: left; }
+.u-locate-center {
+  text-align: center;
+}
 
 
 /* Misc
@@ -429,7 +432,7 @@ there.
 .uploader {
   position: relative;
   border-radius: 8px;
-  width: 640px; height: 360px;
+  width: 100%; height: 360px;
   background: #ffffff;
   overflow: hidden;
 }
