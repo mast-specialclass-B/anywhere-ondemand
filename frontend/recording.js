@@ -51,7 +51,7 @@ if (navigator.mediaDevices.getUserMedia) {
       audio.src = audioURL;
       console.log("recorder stopped");
       console.log(audioURL);
-      uploadRecordingFile(audioURL);
+      uploadRecordingFile(blob);
     }
 
     mediaRecorder.ondataavailable = function(e) {
@@ -75,11 +75,8 @@ async function uploadRecordingFile(fileURI) {
 
 	formData.append("file", file);
 
-	const response = await fetch("http://127.0.0.1:5000/api/upload", {
+	const response = await fetch("http://127.0.0.1:5000/api/upload-blob", {
 		method: "POST",
-        headers:{
-            'Content-Type': 'blob'
-        },
 		body: formData,
 	});
 
