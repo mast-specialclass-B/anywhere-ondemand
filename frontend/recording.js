@@ -51,7 +51,7 @@ if (navigator.mediaDevices.getUserMedia) {
       audio.src = audioURL;
       console.log("recorder stopped");
       console.log(audioURL);
-      uploadRecordingFile(audioURL);
+      uploadRecordingFile(blob);
     }
 
     mediaRecorder.ondataavailable = function(e) {

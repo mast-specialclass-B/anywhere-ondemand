@@ -107,6 +107,21 @@ function generateAllText(json) {
     document.getElementById("AllText").appendChild(allText);
 }
 
+
+function generateTranslate(json) {
+    const errorMessage1 = "翻訳の生成に失敗しました。もう一度お試しください。";
+    //const errorMessage2 = "翻訳こんにゃくが故障しました。もう一度お試しください。"
+    if (isError(json, 'text', errorMessage1, errorMessage1)){
+        return ;
+    } 
+    removePreContent('TransContent');
+    var Ext = document.createElement("p");
+    Ext.setAttribute('id', 'TransContent');
+    Ext.textContent = json['text'];
+    document.getElementById("translatedText").appendChild(Ext);
+}
+
+
 function generateExt(json) {
     const errorMessage1 = "目次に該当する箇所の抜き出しに失敗しました。もう一度お試しください。";
     //const errorMessage2 = "目次に該当する箇所の抜き出しに失敗しました。もう一度お試しください。";
@@ -154,6 +169,9 @@ async function pullOutIndex(index){
 const reloadSummaryButton = document.getElementById("reloadSummaryButton");
 reloadSummaryButton.disabled = true;
 
+const reloadTranslateButton = document.getElementById("reloadTranslateButton");
+reloadTranslateButton.disabled = true;
+
 async function generateIndex(){
     loadCircleSwitch(true);
     const uploadButton = document.getElementById("uploadButton");
@@ -161,10 +179,15 @@ async function generateIndex(){
     const json = await uploadFile();
     generateIndexTable(json);
     generateAllText(json);
+    generateTranslate(json);
     loadCircleSwitch(false);
     const reloadSummaryButton = document.getElementById("reloadSummaryButton");
     if (reloadSummaryButton.disabled == true){
         reloadSummaryButton.disabled = false;
+    }
+    const reloadTranslateButton = document.getElementById("reloadSummaryButton");
+    if (reloadTranslateButton.disabled == true){
+        reloadTranslateButton.disabled = false;
     }
 }
 
