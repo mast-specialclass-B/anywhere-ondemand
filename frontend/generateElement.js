@@ -108,6 +108,50 @@ function generateAllText(json) {
     document.getElementById("AllText").appendChild(allText);
 }
 
+function generateSummary(json) {
+    const errorMessage1 = "要約の生成に失敗しました。もう一度お試しください。";
+    //const errorMessage2 = "要約の生成に失敗しました。もう一度お試しください。"
+    if (isError(json, 'text', errorMessage1, errorMessage1)){
+        return ;
+    } 
+    removePreContent('Summary');
+    var SumText = document.createElement("p");
+    SumText.setAttribute('id', 'Summary');
+    SumText.textContent = json['text'];
+    document.getElementById("summary").appendChild(Ext);
+}
+
+async function letGenerateSummary(){
+    loadCircleSwitch(true);
+    const json = await requestTrans();
+    generateTranslate(json);
+    loadCircleSwitch(false);
+}
+
+async function requestSummary(){  
+    const text_element = document.getElementById("AllText");
+    const text = text_element.textContent;
+
+    data = {'text': text};
+    
+    const response = await fetch("http://127.0.0.1:5000/api/summary", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+    });
+    
+    if (response.ok) {
+        const json = await response.json();
+        console.log("success");
+        return json;
+    } else {
+        console.error("File upload failed");
+        return null;
+    }
+}
+
 function generateTranslate(json) {
     const errorMessage1 = "翻訳の生成に失敗しました。もう一度お試しください。";
     //const errorMessage2 = "翻訳こんにゃくが故障しました。もう一度お試しください。"
@@ -124,7 +168,6 @@ function generateTranslate(json) {
 async function preGenerateTrans(){
     loadCircleSwitch(true);
     const json = await requestTrans();
-    console.log(json);
     generateTranslate(json);
     loadCircleSwitch(false);
 }
@@ -151,7 +194,7 @@ async function requestTrans(){
         console.error("File upload failed");
         return null;
     }
-};
+}
 
 
 function generateExt(json) {
