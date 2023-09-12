@@ -24,6 +24,7 @@
 			<br>
 			<div class="row">
 				<div class="six columns">
+					<h2>Upload File</h2>
 					<div class="uploader">
 						<input type="file" accept="audio/*" id = "fileInput" onchange="ableButton()"/>
 					</div>
@@ -45,9 +46,10 @@
 				<div class="six columns">
 					<h2>Record</h2>
 					<br>
-					<div id="buttons" class = "row">
+					<div id="status"></div>
+					<div class="u-full-width">
 						<button class="button-primary one-half column" id="startRecord">Record</button>
-						<button class="button-primary one-half column" id="stopRecord">Stop</button>
+						<button class="button-primary one-half column" id="stopRecord">Stop</button>	
 					</div>
 					<script src="recording.js"></script>
 				</div>
