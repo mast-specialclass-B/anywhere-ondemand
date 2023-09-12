@@ -96,13 +96,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 録音開始ボタンをクリックしたときのイベント
     startButton.addEventListener('click', function() {
-        statusDiv.innerHTML = '<span class="recording-dot"></span> 録音中';
+        statusDiv.innerHTML = '<span class="recording-dot"></span> Recordnig';
         statusDiv.classList.add('recording');
     });
 
     // 録音停止ボタンをクリックしたときのイベント
     stopButton.addEventListener('click', function() {
-        statusDiv.textContent = '録音中でない';
+        statusDiv.textContent = 'Finish Recording';
         statusDiv.classList.remove('recording');
     });
 });
