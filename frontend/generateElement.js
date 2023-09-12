@@ -151,8 +151,8 @@ async function pullOutIndex(index){
     }
 };
 
-const reloadButton = document.getElementById("reloadButton");
-reloadButton.disabled = true;
+const reloadSummaryButton = document.getElementById("reloadSummaryButton");
+reloadSummaryButton.disabled = true;
 
 async function generateIndex(){
     loadCircleSwitch(true);
@@ -162,9 +162,9 @@ async function generateIndex(){
     generateIndexTable(json);
     generateAllText(json);
     loadCircleSwitch(false);
-    const reloadButton = document.getElementById("reloadButton");
-    if (reloadButton.disabled == true){
-        reloadButton.disabled = false;
+    const reloadSummaryButton = document.getElementById("reloadSummaryButton");
+    if (reloadSummaryButton.disabled == true){
+        reloadSummaryButton.disabled = false;
     }
 }
 
@@ -183,7 +183,7 @@ async function reloadIndex() {
     });
     
     if (response.ok) {
-        const result = await response.json();
+        const result = await response.json();reloadButton
         console.log("success");
         return result;
     } else {
@@ -192,16 +192,29 @@ async function reloadIndex() {
     }
 }
 
-async function reGenerateIndex() {
+async function reGenerateSummary() {
     loadCircleSwitch(true);
-    const reloadButton = document.getElementById("reloadButton");
-    reloadButton.disabled = true;
+    const reloadSummaryButton = document.getElementById("reloadSummaryButton");
+    reloadSummaryButton.disabled = true;
     const json = await reloadIndex();
     generateIndexTable(json);
     generateAllText(json);
     loadCircleSwitch(false);
-    if (reloadButton.disabled == true){
-        reloadButton.disabled = false;
+    if (reloadSummaryButton.disabled == true){
+        reloadSummaryButton.disabled = false;
+    }
+}
+
+async function reGenerateTranslate() {
+    loadCircleSwitch(true);
+    const reloadTranslateButton = document.getElementById("reloadTranslateButton");
+    reloadTranslateButton.disabled = true;
+    const json = await reloadIndex();
+    generateIndexTable(json);
+    generateAllText(json);
+    loadCircleSwitch(false);
+    if (reloadTranslateButton.disabled == true){
+        reloadTranslateButton.disabled = false;
     }
 }
 
