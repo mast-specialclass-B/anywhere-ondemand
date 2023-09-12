@@ -13,12 +13,10 @@ def generate():
     filename = file.filename
     file.save(filename)
 
-    transcript = transcript_file(filename)
-
+    transcript = transcript_file(filename)#ここにテキストを置いている
     result = jsonify({'transcript': {'text': transcript}})
 
     os.remove(filename)
-
     return result
 
 @app.route("/api/upload-blob", methods=["POST"])
@@ -32,11 +30,11 @@ def generate_from_blob():
 
     result = jsonify({'transcript': {'text': transcript}})
 
-    os.remove(filename)
+    os.remove(filename)#保存した音声ファイルを削除
 
     return result
 
-@app.route("/api/pull-out", methods=["POST"])
+@app.route("/api/pull-out", methods=["POST"])#目次の生成
 def pull_out_by_index():
     request_json = request.json
     index = request_json['index']
@@ -70,6 +68,28 @@ def search_by_keyword():
     keyword = request_json['keyword']
 
     content = "以下の文章について、このキーワードに該当する部分を抜き出してください。出力は該当部分の抜出しのみにし、'目次: 'などを含まないようにしてください。\nキーワード: " + keyword + "\n検索する文章: " + text
+    completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", temperature=1.5, messages=[{"role": "user", "content": content}])
+    completion_content = completion.choices[0].message.content
+
+    result = jsonify({'text': completion_content})
+    print(result)
+
+    return result
+
+
+@app.route("/api/summary", methods=["POST"])#要約作成
+def summary():
+    request_json = request.json
+    text = request_json['text']
+    tone =request_json['tone']#選択肢はnormal,gal,ojisanでお願いします。
+    if not tone or tone == "normal":
+        tone=""
+    else:
+        f = open('{}ToneRule.txt'.format(tone), 'r')#変数toneとテキストファイル〇〇tone.txtの名前を揃えてください。
+        tone_rule = f.read()
+        f.close()
+
+    content = "以下の文章について、要約を作成してください。\n作成の際は以下のルールを守ってください" + tone_rule + "出力は'要約: 'などを含まないようにしてください。\n要約する文章: " + text
     completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", temperature=1.5, messages=[{"role": "user", "content": content}])
     completion_content = completion.choices[0].message.content
 

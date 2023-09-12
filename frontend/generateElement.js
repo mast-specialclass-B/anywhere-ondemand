@@ -222,29 +222,6 @@ async function generateIndex(){
     }
 }
 
-async function reloadIndex() {
-    const text_element = document.getElementById("AllText");
-    const text = text_element.textContent;
-
-    data = {'text': text};
-    
-    const response = await fetch("http://127.0.0.1:5000/api/reloadIndex", {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data),
-    });
-    
-    if (response.ok) {
-        const result = await response.json();reloadButton
-        console.log("success");
-        return result;
-    } else {
-        console.error("File upload failed");
-        return null;
-    }
-}
 
 async function reGenerateSummary() {
     loadCircleSwitch(true);
