@@ -82,12 +82,13 @@ def summary():
     request_json = request.json
     text = request_json['text']
     tone =request_json['tone']#選択肢はnormal,gal,ojisanでお願いします。
-    if not tone or tone == "normal":
-        tone=""
-    else:
+   
+    if  tone == "gal" or tone == "ojisan":
         f = open('{}ToneRule.txt'.format(tone), 'r')#変数toneとテキストファイル〇〇tone.txtの名前を揃えてください。
         tone_rule = f.read()
         f.close()
+    else:
+        tone=""
 
     content = "以下の文章について、要約を作成してください。\n作成の際は以下のルールを守ってください" + tone_rule + "出力は'要約: 'などを含まないようにしてください。\n要約する文章: " + text
     completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", temperature=1.5, messages=[{"role": "user", "content": content}])
