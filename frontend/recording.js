@@ -77,9 +77,6 @@ async function uploadRecordingFile(fileURI) {
 
 	const response = await fetch("http://127.0.0.1:5000/api/upload-blob", {
 		method: "POST",
-        headers:{
-            'Content-Type': 'file'
-        },
 		body: formData,
 	});
 
