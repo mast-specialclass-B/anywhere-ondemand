@@ -78,13 +78,13 @@ function generateSummary(json) {
     var SumText = document.createElement("p");
     SumText.setAttribute('id', 'Summary');
     SumText.textContent = json['text'];
-    document.getElementById("summary").appendChild(Ext);
+    document.getElementById("summary").appendChild(SumText);
 }
 
 async function letGenerateSummary(){
     loadCircleSwitch(true);
-    const json = await requestTrans();
-    generateTranslate(json);
+    const json = await requestSummary();
+    generateSummary(json);
     loadCircleSwitch(false);
 }
 
@@ -92,7 +92,7 @@ async function requestSummary(){
     const text_element = document.getElementById("AllText");
     const text = text_element.textContent;
 
-    data = {'text': text};
+    data = {'text': text, 'tone': 'gal'};
     
     const response = await fetch("http://127.0.0.1:5000/api/summary", {
         method: "POST",
