@@ -24,6 +24,7 @@
 			<br>
 			<div class="row">
 				<div class="six columns">
+					<h2>Upload File</h2>
 					<div class="uploader">
 						<input type="file" accept="audio/*" id = "fileInput" onchange="ableButton()"/>
 					</div>
@@ -45,9 +46,10 @@
 				<div class="six columns">
 					<h2>Record</h2>
 					<br>
-					<div id="buttons" class = "row">
+					<div id="status"></div>
+					<div class="u-full-width">
 						<button class="button-primary one-half column" id="startRecord">Record</button>
-						<button class="button-primary one-half column" id="stopRecord">Stop</button>
+						<button class="button-primary one-half column" id="stopRecord">Stop</button>	
 					</div>
 					<script src="recording.js"></script>
 				</div>
@@ -61,25 +63,22 @@
 			
 			<h3>要約</h3>
 			<div class="box">
-			<div id = "Summary"></div>
+			<div id = "summary">
+				<p id="Summary" value="ボタンを押すとここに要約が表示されます"></p>
+			</div>
 			</div>
 			<br>
-			<button onclick="reGenerateSummary()" class="button-primary u-full-width" id = "reloadSummaryButton" >reload</button>
+			<button onclick="letGenerateSummary()" class="button-primary u-full-width" id = "reloadSummaryButton" >Get summary</button>
 			<br>
 			<br>
 			<h3>翻訳</h3>
 			<div class = "box">
 				<div id = "translatedText">
-					<p id="TransContent" value="ここに翻訳が表示されます"></p>
+					<p id="TransContent" value="ボタンを押すとここに翻訳が表示されます"></p>
 				</div>
 			</div>
-			<select name="example" class="five columns">
-				<option>Japanese</option>
-				<option>English</option>
-				<option>Chinsese</option>
-				<option>Korean</option>
-			</select>
-			<button onclick="reGenerateTranslate()" class="five columns button-primary u-pull-right" id = "reloadButton" >reload</button>
+			<br>
+			<button onclick="preGenerateTrans()" class="button-primary u-full-width" id = "reloadTranslateButton" >Translate</button>
 			<br>
 			<br>
 		</div>
