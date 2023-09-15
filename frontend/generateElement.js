@@ -94,11 +94,7 @@ async function requestSummary(){
     const text_element = document.getElementById("AllText");
     const text = text_element.textContent;
 
-<<<<<<< HEAD
     data = {'text': text, 'tone': 'normal'};
-=======
-    data = {'text': text, 'tone': 'gal'};
->>>>>>> origin
     
     const response = await fetch("http://127.0.0.1:5000/api/summary", {
         method: "POST",
